@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>พอร์ทัลพนักงาน — Global</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  :root{
+    --navy:#1B2A4A;
+    --navy-deep:#101B33;
+    --cream:#F7F5EF;
+    --card:#FFFFFF;
+    --brass:#B08D57;
+    --brass-deep:#8C6C3E;
+    --slate:#64748B;
+    --line:#E4E0D6;
+    --danger:#B4432C;
+    --ok:#3F6B4A;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    font-family:'Sarabun', sans-serif;
+    color:var(--navy-deep);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 16px 80px;
+  }
+  header.top{
+    background:var(--navy);
+    color:#fff;
+    padding:64px 16px 46px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;bottom:0;
+    height:6px;
+    background:linear-gradient(90deg, var(--brass), var(--brass-deep));
+  }
+  header.top .eyebrow{
+    letter-spacing:.18em;
+    font-size:12px;
+    text-transform:uppercase;
+    color:#C9B58A;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .liff-user{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,0.08);
+    border-radius:20px;
+    padding:6px 14px 6px 6px;
+    font-size:13px;
+    color:#E8E4D8;
+    margin-top:14px;
+  }
+  .liff-user img{
+    width:24px;height:24px;border-radius:50%;
+  }
+  header.top h1{
+    margin:0;
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+  header.top p{
+    margin:8px 0 0;
+    color:#B9C2D6;
+    font-size:14px;
+  }
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    margin-top:-14px;
+    box-shadow:0 10px 30px rgba(16,27,51,0.10);
+    overflow:hidden;
+  }
+  .section{
+    padding:26px 26px;
+    border-bottom:1px solid var(--line);
+  }
+  .section:last-child{border-bottom:none;}
+  .section:first-child{padding-top:34px;}
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .section-num{
+    font-family:'Sarabun',sans-serif;
+    font-weight:700;
+    color:var(--brass-deep);
+    font-size:13px;
+    border:1.5px solid var(--brass);
+    border-radius:20px;
+    padding:2px 10px;
+    letter-spacing:.05em;
+  }
+  .section-title{
+    font-size:17px;
+    font-weight:700;
+    color:var(--navy-deep);
+  }
+
+  /* --- วันพักร้อน --- */
+  .vac-remaining{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .vac-remaining .num{
+    font-size:46px;
+    font-weight:700;
+    color:var(--navy);
+    line-height:1;
+  }
+  .vac-remaining .lbl{
+    font-size:14px;
+    color:var(--slate);
+  }
+  .bar{
+    height:8px;
+    border-radius:99px;
+    background:var(--line);
+    overflow:hidden;
+    margin-bottom:18px;
+  }
+  .bar > span{
+    display:block;height:100%;
+    background:linear-gradient(90deg, var(--brass), var(--brass-deep));
+    border-radius:99px;
+  }
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+  }
+  .stat{
+    text-align:center;
+    padding:10px 4px;
+    border-radius:8px;
+    background:#FAF9F5;
+    border:1px solid var(--line);
+  }
+  .stat .v{font-size:17px;font-weight:700;color:var(--navy);}
+  .stat .k{font-size:11px;color:var(--slate);margin-top:2px;}
+
+  /* --- สรุปวันลา --- */
+  .leave-summary-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+  }
+  .leave-summary-grid .box{
+    text-align:center;
+    background:#FAF9F5;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    padding:14px 6px;
+  }
+  .leave-summary-grid .box .v{font-size:21px;font-weight:700;color:var(--navy);}
+  .leave-summary-grid .box .k{font-size:12px;color:var(--slate);margin-top:3px;}
+
+  /* --- แท็บ --- */
+  .tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:18px;
+  }
+  .tabs button{
+    flex:1;
+    border:1.5px solid var(--line);
+    background:#fff;
+    color:var(--slate);
+    padding:10px 4px;
+    border-radius:8px;
+    font-family:inherit;
+    font-size:13.5px;
+    font-weight:600;
+    cursor:pointer;
+    transition:border-color .15s, background .15s, color .15s;
+  }
+  .tabs button.active{
+    background:var(--navy);
+    color:#fff;
+    border-color:var(--navy);
+  }
+
+  table{width:100%;border-collapse:collapse;}
+  thead th{
+    text-align:left;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--slate);
+    padding:0 6px 10px;
+    border-bottom:1.5px solid var(--line);
+    font-weight:600;
+  }
+  tbody td{
+    padding:11px 6px;
+    font-size:14px;
+    border-bottom:1px solid var(--line);
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  .pill{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:99px;
+    font-size:11.5px;
+    font-weight:600;
+    color:#fff;
+  }
+  .pill.in{background:var(--ok);}
+  .pill.out{background:var(--danger);}
+  .pill.type{background:var(--brass-deep);}
+
+  .empty{
+    text-align:center;
+    padding:30px 10px;
+    color:var(--slate);
+    font-size:14px;
+  }
+  .state{
+    max-width:520px;
+    margin:60px auto;
+    text-align:center;
+    padding:0 24px;
+    color:var(--slate);
+    font-size:14px;
+  }
+  .state .spin{
+    width:28px;height:28px;
+    border-radius:50%;
+    border:3px solid var(--line);
+    border-top-color:var(--navy);
+    margin:0 auto 14px;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .state.err{color:var(--danger);}
+  .footnote{
+    text-align:center;
+    font-size:12px;
+    color:var(--slate);
+    margin-top:18px;
+  }
+</style>
+</head>
+<body>
+
+<div id="loading" class="state">
+  <div class="spin"></div>
+  กำลังโหลดข้อมูลของคุณ...
+</div>
+
+<div id="app" style="display:none;">
+
+  <header class="top">
+    <div class="eyebrow">GLOBAL — ระบบสารสนเทศบุคคล</div>
+    <h1>พอร์ทัลพนักงาน</h1>
+    <p>ข้อมูลวันลาและการเข้าออกงานของคุณ</p>
+    <div class="liff-user" id="liffUserChip">
+      <img id="pic" src="" alt="">
+      <span id="empName">-</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="card" id="cardBody">
+
+      <!-- Section 1: วันพักร้อน -->
+      <div class="section">
+        <div class="section-head">
+          <span class="section-num">01</span>
+          <span class="section-title">วันพักร้อน</span>
+        </div>
+        <div class="vac-remaining">
+          <span class="num" id="vacRemain">0</span>
+          <span class="lbl">วัน คงเหลือ</span>
+        </div>
+        <div class="bar"><span id="vacBar" style="width:0%"></span></div>
+        <div class="stat-row">
+          <div class="stat"><div class="v" id="vAccum">0</div><div class="k">สะสม</div></div>
+          <div class="stat"><div class="v" id="vYear">0</div><div class="k">ปีนี้</div></div>
+          <div class="stat"><div class="v" id="vTotal">0</div><div class="k">ทั้งหมด</div></div>
+          <div class="stat"><div class="v" id="vUsed">0</div><div class="k">ใช้แล้ว</div></div>
+        </div>
+      </div>
+
+      <!-- Section 2: สรุปวันลา -->
+      <div class="section">
+        <div class="section-head">
+          <span class="section-num">02</span>
+          <span class="section-title">สรุปวันลา</span>
+        </div>
+        <div class="leave-summary-grid">
+          <div class="box"><div class="v" id="lPersonal">0</div><div class="k">ลากิจ</div></div>
+          <div class="box"><div class="v" id="lSick">0</div><div class="k">ลาป่วย</div></div>
+          <div class="box"><div class="v" id="lOther">0</div><div class="k">ลาอื่นๆ</div></div>
+        </div>
+      </div>
+
+      <!-- Section 3: ประวัติ -->
+      <div class="section">
+        <div class="section-head">
+          <span class="section-num">03</span>
+          <span class="section-title">ประวัติ</span>
+        </div>
+        <div class="tabs">
+          <button id="tabAtt" class="active">บันทึกเข้าออกงาน</button>
+          <button id="tabLeave">ประวัติการลา</button>
+        </div>
+
+        <div id="panelAtt">
+          <table>
+            <thead><tr><th>วันที่</th><th>เวลา</th><th>สถานะ</th></tr></thead>
+            <tbody id="attBody"></tbody>
+          </table>
+          <div id="attEmpty" class="empty" style="display:none;">ยังไม่มีบันทึกเข้าออกงาน</div>
+        </div>
+
+        <div id="panelLeave" style="display:none;">
+          <table>
+            <thead><tr><th>วันที่ลา</th><th>จำนวน</th><th>ประเภท</th></tr></thead>
+            <tbody id="leaveBody"></tbody>
+          </table>
+          <div id="leaveEmpty" class="empty" style="display:none;">ยังไม่มีประวัติการลา</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="footnote">ข้อมูลอัปเดตอัตโนมัติจากระบบฝ่ายบุคคล</div>
+  </div>
+</div>
+
+<div id="errorBox" class="state err" style="display:none;"></div>
+
+<script>
+// ⚠️ ใส่ LIFF ID ของคุณตรงนี้ (จาก LINE Developers Console > LIFF)
+const LIFF_ID = '2010653646-2vLzURiR';
+
+// ⚠️ ใส่ Web app URL ของ Apps Script ตรงนี้ (ได้จากตอน Deploy > New deployment > Web app)
+// รูปแบบ: https://script.google.com/macros/s/xxxxxxxxxxxx/exec
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzGvX2GHVTwvpVI6wgpkZBRXYS8Ji2B4sEKNtSj6NsN9W56rlkgo9u1zVAQCZTfMl_P/exec';
+
+function showError(msg){
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  const box = document.getElementById('errorBox');
+  box.style.display = 'block';
+  box.textContent = 'เกิดข้อผิดพลาด: ' + msg;
+}
+
+function render(data){
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  document.getElementById('empName').textContent = data.name || 'พนักงาน';
+  if (data.picture) document.getElementById('pic').src = data.picture;
+
+  if (!data.found){
+    document.getElementById('cardBody').innerHTML =
+      '<div class="section"><div class="empty">ไม่พบข้อมูลพนักงานของคุณในระบบ<br>กรุณาติดต่อฝ่ายบุคคล</div></div>';
+    return;
+  }
+
+  const vac = data.vacation;
+  document.getElementById('vacRemain').textContent = vac.remaining;
+  document.getElementById('vAccum').textContent = vac.accumulated;
+  document.getElementById('vYear').textContent = vac.thisYear;
+  document.getElementById('vTotal').textContent = vac.total;
+  document.getElementById('vUsed').textContent = vac.used;
+  const pct = vac.total > 0 ? Math.min(100, Math.round((vac.remaining / vac.total) * 100)) : 0;
+  document.getElementById('vacBar').style.width = pct + '%';
+
+  const ls = data.leaveSummary;
+  document.getElementById('lPersonal').textContent = ls.personal;
+  document.getElementById('lSick').textContent = ls.sick;
+  document.getElementById('lOther').textContent = ls.other;
+
+  const attBody = document.getElementById('attBody');
+  if (data.attendance.length === 0){
+    document.getElementById('attEmpty').style.display = 'block';
+  } else {
+    data.attendance.forEach(a => {
+      const tr = document.createElement('tr');
+      const cls = a.status && a.status.indexOf('เข้า') > -1 ? 'in' : 'out';
+      tr.innerHTML = `<td>${a.date}</td><td>${a.time}</td><td><span class="pill ${cls}">${a.status}</span></td>`;
+      attBody.appendChild(tr);
+    });
+  }
+
+  const leaveBody = document.getElementById('leaveBody');
+  if (data.leaveHistory.length === 0){
+    document.getElementById('leaveEmpty').style.display = 'block';
+  } else {
+    data.leaveHistory.forEach(l => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${l.start}${l.end && l.end !== l.start ? ' - ' + l.end : ''}</td><td>${l.days} วัน</td><td><span class="pill type">${l.type}</span></td>`;
+      leaveBody.appendChild(tr);
+    });
+  }
+}
+
+document.getElementById('tabAtt').addEventListener('click', () => {
+  document.getElementById('tabAtt').classList.add('active');
+  document.getElementById('tabLeave').classList.remove('active');
+  document.getElementById('panelAtt').style.display = 'block';
+  document.getElementById('panelLeave').style.display = 'none';
+});
+document.getElementById('tabLeave').addEventListener('click', () => {
+  document.getElementById('tabLeave').classList.add('active');
+  document.getElementById('tabAtt').classList.remove('active');
+  document.getElementById('panelLeave').style.display = 'block';
+  document.getElementById('panelAtt').style.display = 'none';
+});
+
+async function main(){
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    if (!liff.isLoggedIn()){
+      liff.login();
+      return;
+    }
+    const idToken = liff.getIDToken();
+    const res = await fetch(GAS_URL + '?idToken=' + encodeURIComponent(idToken));
+    if (!res.ok) throw new Error('เรียก API ไม่สำเร็จ (HTTP ' + res.status + ')');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    render(data);
+  } catch (e) {
+    showError(e.message || String(e));
+  }
+}
+
+main();
+</script>
+</body>
+</html>
