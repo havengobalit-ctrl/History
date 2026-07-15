@@ -230,6 +230,16 @@
   .pill.in{background:var(--ok);}
   .pill.out{background:var(--danger);}
   .pill.type{background:var(--brass-deep);}
+  .view-link{
+    color:var(--navy);
+    font-weight:600;
+    font-size:13px;
+    text-decoration:none;
+    border-bottom:1.5px solid var(--brass);
+    padding-bottom:1px;
+    white-space:nowrap;
+  }
+  .no-link{color:var(--line);}
 
   .empty{
     text-align:center;
@@ -273,7 +283,7 @@
 <div id="app" style="display:none;">
 
   <header class="top">
-    <div class="eyebrow">HavenGobal</div>
+    <div class="eyebrow">HavenGlobal</div>
     <h1>History</h1>
     <p>ข้อมูลวันลาและการเข้าออกงานของคุณ</p>
     <div class="liff-user" id="liffUserChip">
@@ -338,7 +348,7 @@
 
         <div id="panelLeave" style="display:none;">
           <table>
-            <thead><tr><th>วันที่ลา</th><th>จำนวน</th><th>ประเภท</th></tr></thead>
+            <thead><tr><th>วันที่ลา</th><th>จำนวน</th><th>ประเภท</th><th>ใบลา</th></tr></thead>
             <tbody id="leaveBody"></tbody>
           </table>
           <div id="leaveEmpty" class="empty" style="display:none;">ยังไม่มีประวัติการลา</div>
@@ -413,7 +423,10 @@ function render(data){
   } else {
     data.leaveHistory.forEach(l => {
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${l.start}${l.end && l.end !== l.start ? ' - ' + l.end : ''}</td><td>${l.days} วัน</td><td><span class="pill type">${l.type}</span></td>`;
+      const linkCell = l.link
+        ? `<a href="${l.link}" target="_blank" rel="noopener" class="view-link">ดูใบลา</a>`
+        : '<span class="no-link">—</span>';
+      tr.innerHTML = `<td>${l.start}${l.end && l.end !== l.start ? ' - ' + l.end : ''}</td><td>${l.days} วัน</td><td><span class="pill type">${l.type}</span></td><td>${linkCell}</td>`;
       leaveBody.appendChild(tr);
     });
   }
